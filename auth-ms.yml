@@ -48,3 +48,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+grpc:
+  notification:
+    host: ${NOTIFICATION_SERVICE_HOST:notification-service}
+    port: ${NOTIFICATION_SERVICE_PORT:9092}
