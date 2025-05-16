@@ -1,0 +1,64 @@
+server:
+  port: 8082
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    consumer:
+      group-id: notifications-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  mail:
+    host: ${MAIL_HOST:mailhog}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:false}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:false}
+    from: ${MAIL_FROM:no-reply@uguimar.com}
+
+kafka:
+  topics:
+    verification-code: user-verification-code
+    welcome: user-welcome
+    password-reset: user-password-reset
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://service-discovery:8761/eureka/}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    hostname: ${HOSTNAME:localhost}
+    instance-id: ${spring.application.name}:${random.uuid}
+    appname: ${spring.application.name}
+
+logging:
+  level:
+    root: INFO
+    com.uguimar.notificationsms: DEBUG
+    org.springframework.mail: DEBUG
+    org.springframework.kafka: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true
