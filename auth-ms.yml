@@ -33,9 +33,16 @@ jwt:
   access-token-expiration: 1800000   # 30 minutos
   refresh-token-expiration: 604800000  # 7 días
 
+kafka:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+  topics:
+    verification-code: user-verification-code
+    welcome: user-welcome
+    password-reset: user-password-reset
+
 logging:
   level:
-    com.yobel.authms: DEBUG
+    com.uguimar.authms: DEBUG
     org.springframework.security: INFO
     org.springframework.data.r2dbc: INFO
     reactor.netty: INFO
@@ -44,12 +51,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: ["health", "info", "metrics", "prometheus"]
+        include: "*"
   endpoint:
     health:
       show-details: always
-
-grpc:
-  notification:
-    host: ${NOTIFICATION_SERVICE_HOST:notification-service}
-    port: ${NOTIFICATION_SERVICE_PORT:9092}
+  tracing:
+    sampling:
+      probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true
